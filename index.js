@@ -1,4 +1,5 @@
-var express = require('express')
+const express = require('express')
+const path = require("path");
 var app = express()
 const PORT = process.env.PORT || 5000;
 
@@ -6,7 +7,11 @@ app.get('/', function (req, res) {
   res.send('Hello World!')
 })
 
+app.use('/clock', express.static('./public/clock/'))
+
+
 app.get('/time', function (req, res) {
+  function getTime() {
     let date_ob = new Date();
     let date = ("0" + date_ob.getDate()).slice(-2);
     let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
@@ -15,8 +20,10 @@ app.get('/time', function (req, res) {
     let minutes = date_ob.getMinutes();
     let seconds = date_ob.getSeconds();
     var text = "Current Time: ";
-    text += year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
-    res.send(text);
+    return text += year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
+  }
+
+  res.send(getTime());
 })
 
 app.listen(PORT, function () {
