@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/oscar86hsu/nodejs-learn/issues"
   },
-  "homepage": "https://github.com/oscar86hsu/nodejs-learn#readme"
+  "homepage": "https://github.com/oscar86hsu/nodejs-learn#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }

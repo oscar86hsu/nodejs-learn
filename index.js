@@ -1,10 +1,12 @@
-const http = require("http");
-var url = require('url');
-
-const hostname = "127.0.0.1";
+var express = require('express')
+var app = express()
 const PORT = process.env.PORT || 5000;
 
-const server = http.createServer((req, res) => {
+app.get('/', function (req, res) {
+  res.send('Hello World!')
+})
+
+app.get('/time', function (req, res) {
     let date_ob = new Date();
     let date = ("0" + date_ob.getDate()).slice(-2);
     let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
@@ -12,11 +14,11 @@ const server = http.createServer((req, res) => {
     let hours = date_ob.getHours();
     let minutes = date_ob.getMinutes();
     let seconds = date_ob.getSeconds();
-    var text = "Hello World!\nCurrent Time: ";
+    var text = "Current Time: ";
     text += year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    res.end(text);
-});
+    res.send(text);
+})
 
-server.listen(PORT);
+app.listen(PORT, function () {
+  console.log(`App listening on port ${PORT}!`)
+})
