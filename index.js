@@ -3,11 +3,15 @@ const path = require("path");
 var app = express()
 const PORT = process.env.PORT || 5000;
 
-app.get('/', function (req, res) {
-  res.send('Hello World!')
-})
+app.set('view engine', 'ejs');
 
-app.use('/clock', express.static('./public/clock/'))
+app.use('/', express.static('./public/home/'));
+
+app.use('/clock', express.static('./public/clock/'));
+
+app.get('/hello', function(req, res) {
+  res.send("Hello World!!!")
+})
 
 
 app.get('/time', function (req, res) {
