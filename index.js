@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 
 const PORT = process.env.PORT || 5000;
 const USERNAME = process.env.USERNAME || "user";
-const PASSWORD = process.env.PASSWORD || "1234";
+const PASSWORD = process.env.PASSWORD || bcrypt.hashSync("1234", 10);;
 
 var sessionStore = new session.MemoryStore;
 var app = express();
