@@ -1,9 +1,11 @@
-const express = require('express')
+const express = require('express');
 const path = require("path");
-var app = express()
+const bcrypt = require("bcrypt");
+var app = express();
 const PORT = process.env.PORT || 5000;
 
 app.set('view engine', 'ejs');
+app.use(express.urlencoded({extended: false}));
 
 app.use('/', express.static('./public/home/'));
 
@@ -12,7 +14,6 @@ app.use('/clock', express.static('./public/clock/'));
 app.get('/hello', function(req, res) {
   res.send("Hello World!!!")
 })
-
 
 app.get('/time', function (req, res) {
   function getTime() {
@@ -28,6 +29,14 @@ app.get('/time', function (req, res) {
   }
 
   res.send(getTime());
+})
+
+app.get('/login', function (req, res) {
+  res.render('login.ejs')
+})
+
+app.post('/login', function (req, res) {
+  
 })
 
 app.listen(PORT, function () {
