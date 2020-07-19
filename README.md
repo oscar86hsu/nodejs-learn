@@ -22,7 +22,7 @@
     Digital Clock using Javascript.
 
 ## View Engine (EJS)
-`const flash = require('connect-flash');`
+`const flash = require('connect-flash');`<br>
 `app.set('view engine', 'ejs');`<br>
 ``app.get('/login', function (req, res) {
   res.render('login.ejs', { message: req.flash('error') })
@@ -36,10 +36,10 @@
     Dashboard after logged in.
 
 ## Express Session
-`const session = require('express-session');`
+`const session = require('express-session');`<br>
 ``res.locals.username = username;
     req.session.username = res.locals.username;
     console.log(req.session.username);
-    res.render('dashboard.ejs', {username: username};``
+    res.render('dashboard.ejs', {username: username};``<br>
 ### Dashboard
     Show Hello `username` in page.
