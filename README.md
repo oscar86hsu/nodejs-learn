@@ -49,6 +49,7 @@ Default password: 1234<br>
 
 ## To do list
 - [ ] Calculator
+- [ ] Object Detector
 - [ ] URL Shortener
 - [ ] Chat App
 - [ ] Weather Dashboard
