@@ -1,4 +1,7 @@
 # NodeJS Note
+Demo Site: [https://app.oscarhsu.me](https://app.oscarhsu.me)<br>
+Default username: user<br>
+Default password: 1234<br>
 ## Express Basic
 `const express = require('express');`<br>
 `var app = express();`<br>
