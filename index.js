@@ -43,7 +43,7 @@ app.get('/time', function (req, res) {
     let hours = date_ob.getHours();
     let minutes = date_ob.getMinutes();
     let seconds = date_ob.getSeconds();
-    return text += year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
+    return year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
   }
 
   res.send(getTime());
