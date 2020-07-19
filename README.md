@@ -46,3 +46,10 @@ Default password: 1234<br>
     res.render('dashboard.ejs', {username: username};``<br>
 ### Dashboard
     Show Hello `username` in page.
+
+## To do list
+- [ ] Calculator
+- [ ] URL Shortener
+- [ ] Chat App
+- [ ] Weather Dashboard
+- [ ] Ads
