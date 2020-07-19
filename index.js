@@ -50,26 +50,34 @@ app.get('/time', function (req, res) {
 })
 
 app.get('/login', function (req, res) {
-  res.render('login.ejs')
+  res.render('login.ejs', { message: req.flash('error') })
 })
 
-app.post('/login', function (req, res) {
+app.get('/logout', function (req, res) {
+  req.session.destroy();
+  res.redirect('/');
+})
+
+
+app.post('/dashboard', function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
 
   if (username === USERNAME && bcrypt.compareSync(password, PASSWORD)) {
-    res.redirect('/dashboard')
+    res.locals.username = username;
+    req.session.username = res.locals.username;
+    console.log(req.session.username);
+    res.render('dashboard.ejs')
   }
   else {
     console.log('Login Failed!');
     req.flash('error', 'Login Failed!');
-    res.locals.message = req.flash();
-    res.render('login')
+    res.redirect('/login');
   }
 })
 
 app.get('/dashboard', function (req, res) {
-  res.render('dashboard.ejs')
+  res.redirect('/login');
 })
 
 app.listen(PORT, function () {
