@@ -67,7 +67,7 @@ app.post('/dashboard', function (req, res) {
     res.locals.username = username;
     req.session.username = res.locals.username;
     console.log(req.session.username);
-    res.render('dashboard.ejs')
+    res.render('dashboard.ejs', {username: username})
   }
   else {
     console.log('Login Failed!');
