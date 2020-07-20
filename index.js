@@ -3,33 +3,65 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const path = require("path");
+const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const mongoose = require('mongoose');
+const passport = require('passport');
+const connectEnsureLogin = require('connect-ensure-login');
+const passportLocalMongoose = require('passport-local-mongoose');
+const LocalStrategy = require('passport-local').Strategy
+const Schema = mongoose.Schema;
 
+// Variables
 const PORT = process.env.PORT || 5000;
 const USERNAME = process.env.USERNAME || "user";
-const PASSWORD = process.env.PASSWORD || bcrypt.hashSync("1234", 10);;
+const PASSWORD = process.env.PASSWORD || "1234";
+const COOKIESECRET = crypto.randomBytes(20).toString('hex');
 
-var sessionStore = new session.MemoryStore;
+// Express framework
 var app = express();
 
-app.use(cookieParser('b0w4FYvFklV0CldeSkWx'));
-app.use(session({
-  cookie: { maxAge: 60000 }, store: sessionStore,
-  saveUninitialized: true,
-  resave: 'true',
-  secret: 'b0w4FYvFklV0CldeSkWx'
-}));
-app.use(flash());
-
+// View engine setup
 app.set('view engine', 'ejs');
 
-app.use(express.urlencoded({ extended: false }));
+// Middleware setup
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(flash());
+app.use(cookieParser(COOKIESECRET));
+app.use(session({
+  cookie: { maxAge: 60000 },
+  saveUninitialized: true,
+  resave: 'true',
+  secret: COOKIESECRET
+}));
 
-app.use('/', express.static('./public/home/'));
+// Passport setup
+var Account = require('./models/account');
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
+Account.register({username:USERNAME, active: false}, PASSWORD).then(() => {
+  console.log("User Registered");
+}).catch((err) => {
+  console.log("User Already Registered");
+});;;
 
-app.use('/clock', express.static('./public/clock/'));
+// Connect MongoDB
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+  console.log("Connected to Database");
+}).catch((err) => {
+  console.log("Not Connected to Database ERROR! \n", err);
+});;
 
+// Serve static page
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Routes
 app.get('/hello', function (req, res) {
   res.send("Hello World!!!")
 })
@@ -59,26 +91,23 @@ app.get('/logout', function (req, res) {
 })
 
 
-app.post('/dashboard', function (req, res) {
-  var username = req.body.username;
-  var password = req.body.password;
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), (req, res, next) => {
+  req.session.save((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/dashboard');
+  });
+});
 
-  if (username === USERNAME && bcrypt.compareSync(password, PASSWORD)) {
-    res.locals.username = username;
-    req.session.username = res.locals.username;
-    console.log(req.session.username);
-    res.render('dashboard.ejs', {username: username})
-  }
-  else {
-    console.log('Login Failed!');
-    req.flash('error', 'Login Failed!');
-    res.redirect('/login');
-  }
+app.get('/dashboard', connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  res.render('dashboard', {username: req.user.username});
 })
 
-app.get('/dashboard', function (req, res) {
-  res.redirect('/login');
-})
+// 404 Not found
+app.get('*', function(req, res){
+  res.status(404).redirect('/404.html');
+});
 
 app.listen(PORT, function () {
   console.log(`App listening on port ${PORT}!`)

@@ -15,8 +15,7 @@ Default password: 1234<br>
     Return Current Time as String
 
 ## Express Static HTML
-`app.use('/', express.static('./public/home/'));`<br>
-`app.use('/clock', express.static('./public/clock/'));`<br>
+`app.use(express.static(path.join(__dirname, 'public')));`<br>
 
 ### Home Page
     Home Page with links to different path.
