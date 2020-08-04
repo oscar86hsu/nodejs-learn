@@ -1,5 +1,5 @@
 # NodeJS Note
-Demo Site: [https://app.oscarhsu.me](https://app.oscarhsu.me)<br>
+Demo Site: [https://oscar86hsu-nodejs-learn.herokuapp.com/](https://oscar86hsu-nodejs-learn.herokuapp.com/)<br>
 Default username: user<br>
 Default password: 1234<br>
 ## Express Basic
